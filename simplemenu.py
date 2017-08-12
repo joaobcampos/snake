@@ -29,21 +29,23 @@ class Example(QMainWindow):
         
 	def initUI(self):               
 		
-		'''exitAct = QAction(QIcon('exit.png'), '&Exit', self)
-		exitAct.setShortcut('Ctrl+Q')
-		exitAct.setStatusTip('Exit application')
-		exitAct.triggered.connect(qApp.quit)
-		self.statusBar()
-		menubar = self.menuBar()
-		fileMenu = menubar.addMenu('&File')
-		fileMenu.addAction(exitAct)'''
+		btn_snake = QPushButton('snake', self)
+		btn_snake.setToolTip('click here if you want to play snake')
+		btn_snake.resize(btn_snake.sizeHint())
+		btn_snake.move(500, 250)
+		
+		btn_paddle = QPushButton('paddle', self)
+		btn_paddle.setToolTip('click here if you want to play the paddle game')
+		btn_paddle.resize(btn_paddle.sizeHint())
+		btn_paddle.move(500, 500)
+		
 		qbtn = QPushButton('Quit', self)
 		#qbtn.clicked.connect(QCoreApplication.instance().quit)
 		qbtn.clicked.connect(self.close)
 		qbtn.resize(qbtn.sizeHint())
-		qbtn.move(50, 50)
+		qbtn.move(500, 750)
 		
-		self.setGeometry(300, 300, 300, 200)
+		self.setGeometry(0, 0, 1000, 1000)
 		self.setWindowTitle('Simple menu')    
 		self.show()
 
