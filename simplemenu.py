@@ -15,10 +15,8 @@ Last edited: January 2017
 """
 
 import sys
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication
-from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton)
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QWidget, QToolTip, QPushButton
 from PyQt5.QtCore import QCoreApplication
-
 from PyQt5.QtGui import QIcon
 
 
@@ -40,7 +38,8 @@ class Example(QMainWindow):
 		fileMenu = menubar.addMenu('&File')
 		fileMenu.addAction(exitAct)'''
 		qbtn = QPushButton('Quit', self)
-		qbtn.clicked.connect(QCoreApplication.instance().quit)
+		#qbtn.clicked.connect(QCoreApplication.instance().quit)
+		qbtn.clicked.connect(self.close)
 		qbtn.resize(qbtn.sizeHint())
 		qbtn.move(50, 50)
 		
