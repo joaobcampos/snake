@@ -17,6 +17,7 @@ from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt, QBasicTimer, QTimer
 import sys, random
 from enum import Enum
+import csv
 
 class Direction(Enum):
 	UP = 1
@@ -59,6 +60,9 @@ class Example(QWidget):
 		p.setColor(self.backgroundRole(), Qt.white)
 		self.setPalette(p)
 		
+		#set the maze
+		self.maze = self.loadmaze('pos_maze.csv')
+		
 		#Set snake parameters
 		self.direction = 4
 		self.x_max = 125
@@ -83,14 +87,28 @@ class Example(QWidget):
 		self.apple_activate()
 		self.show()
 
+	def loadmaze(self, filename):
+		s = set()
+		with open(filename) as f:
+			reader = csv.reader(f)
+			for row in reader:
+				s.add(int(row[0]))
+		return s	
+
 	def paintEvent(self, e):
 	
 		qp = QPainter()
 		qp.begin(self)
 		self.drawSnake(qp)
 		self.drawApple(qp)
+		qp.setBrush(Qt.yellow)
+		qp.setPen(Qt.green)
+		for i in self.maze:
+			r = i //self.y_max
+			c = i % self.y_max
+			qp.drawRect(r * self.BoardWidth // self.x_max, c * self.BoardHeight // self.y_max, self.BoardWidth // self.x_max, self.BoardHeight // self.y_max)
 		qp.end()
-		
+		self.update()
 		
 	def drawSnake(self, qp):
 		qp.setBrush(Qt.red)
@@ -153,8 +171,6 @@ class Example(QWidget):
 		margin_x = self.snake[-1][0] - self.apple_pos[0]
 		margin_y = self.snake[-1][1] - self.apple_pos[1]
 		eat_margin = 1
-		print("apple active: " + str(self.apple_active) )
-		print("apple eaten: " + str(self.apple_eaten) )
 		if(abs(margin_x) < eat_margin and abs(margin_y) < eat_margin and self.apple_active == True and self.apple_eaten == False):
 			print("\n\n\n\n\n\n\n\n")
 			print("Apple was eaten")
@@ -186,6 +202,15 @@ class Example(QWidget):
 		if current_x < 0 or current_x >= self.x_max or current_y < 0 or current_y >= self.y_max:
 			print("Game over")
 			sys.exit()
+		
+		#Check if the new position collides with the maze
+		maze_pos = self.y_max * current_x + current_y
+		#print(maze_pos)
+		
+		if maze_pos in self.maze:
+			print("Game over")
+			sys.exit()
+		
 		#Check if new position collides with the snake:
 		if [current_x, current_y] in self.snake and [current_x, current_y] != self.snake[-2]:
 			print("Game over")
